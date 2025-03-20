@@ -1,19 +1,89 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>До и после слайдер</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Слайдер до/после</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/juxtapose@1.0.3/dist/css/juxtapose.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+    .juxtapose-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .button-container {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-  <div class="twentytwenty-container">
-    <img src="before.jpg" alt="Before">
-    <img src="after.jpg" alt="After">
+
+  <div class="juxtapose-container">
+    <div class="juxtapose" data-before="before1.jpg" data-after="after1.jpg">
+      <img src="before1.jpg" />
+      <img src="after1.jpg" />
+    </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-twentytwenty/1.0.1/jquery.twentytwenty.min.js"></script>
-  <script src="script.js"></script>
+  <div class="button-container">
+    <button id="prevButton">Назад</button>
+    <button id="nextButton">Вперед</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/juxtapose@1.0.3/dist/js/juxtapose.min.js"></script>
+  <script>
+    let currentIndex = 0;
+    const images = [
+      {before: 'before1.jpg', after: 'after1.jpg'},
+      {before: 'before2.jpg', after: 'after2.jpg'},
+      {before: 'before3.jpg', after: 'after3.jpg'}
+    ];
+
+    const juxtaposeElement = document.querySelector('.juxtapose');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+
+    function updateSlider(index) {
+      juxtaposeElement.innerHTML = `
+        <img src="${images[index].before}" />
+        <img src="${images[index].after}" />
+      `;
+      // Перезагружаем juxtapose для обновления
+      new window.JXSlider(juxtaposeElement);
+    }
+
+    nextButton.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % images.length;
+      updateSlider(currentIndex);
+    });
+
+    prevButton.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      updateSlider(currentIndex);
+    });
+
+    // Инициализация слайдера с первым набором изображений
+    updateSlider(currentIndex);
+  </script>
+  
 </body>
 </html>
